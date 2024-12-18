@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <h1>Nombre d'artistes trouvés : {{ artistes | length }}</h1>
+    {% for artiste in artistes %}
+        <span class="d-block">
+            {{ artiste.name | upper }} - <b class="btn-primary p-1">{{ artiste.discs | length }}</b> дисков
+        </span>
+    {% endfor %}
+</div>
+{% endblock %}
