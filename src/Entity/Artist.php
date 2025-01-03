@@ -5,9 +5,16 @@ namespace App\Entity;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
+#[ApiResource(operations: [
+    new Get(),
+    new GetCollection(),
+])]
 class Artist
 {
     #[ORM\Id]
@@ -24,7 +31,7 @@ class Artist
     /**
      * @var Collection<int, disc>
      */
-    #[ORM\OneToMany(targetEntity: Disc::class, mappedBy: 'artist')]
+    #[ORM\OneToMany(targetEntity: disc::class, mappedBy: 'artist')]
     private Collection $discs;
 
     public function __construct()
@@ -76,7 +83,7 @@ class Artist
         return $this->discs;
     }
 
-    public function addDisc(Disc $disc): static
+    public function addDisc(disc $disc): static
     {
         if (!$this->discs->contains($disc)) {
             $this->discs->add($disc);
@@ -86,7 +93,7 @@ class Artist
         return $this;
     }
 
-    public function removeDisc(Disc $disc): static
+    public function removeDisc(disc $disc): static
     {
         if ($this->discs->removeElement($disc)) {
             // set the owning side to null (unless already changed)

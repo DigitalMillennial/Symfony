@@ -6,10 +6,12 @@ use App\Entity\Contact;
 use App\Form\ContactFormType;
 use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class ContactController extends AbstractController
 {
@@ -34,13 +36,22 @@ class ContactController extends AbstractController
             $entityManager->persist($message);
             $entityManager->flush();
 
-            // Отправка письма через MailService
-            $this->mailService->sendMail(
-                'hello@example.com',       // Получатель
-                $message->getEmail(),      // Отправитель
-                $message->getObjet(),      // Тема письма
-                $message->getMessage()     // Текст сообщения
-            );
+
+            try {
+                // $mailer->send($email);
+                // Отправка письма через MailService
+                $this->mailService->sendMail(
+                    'hello@example.com',       // Получатель
+                    $message->getEmail(),      // Отправитель
+                    $message->getObjet(),      // Тема письма
+                    $message->getMessage()     // Текст сообщения
+                );
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                // error message or try to resend the message
+
+            }
+
 
             $this->addFlash('success', 'Votre message a bien été envoyé!');
 

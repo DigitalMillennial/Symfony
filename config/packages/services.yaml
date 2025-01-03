@@ -1,0 +1,6 @@
+services:
+    App\EventSubscriber\ContactSubscriber:
+        arguments:
+            $mailer: '@Symfony\Component\Mailer\MailerInterface'
+        tags:
+            - { name: doctrine.event_subscriber }
